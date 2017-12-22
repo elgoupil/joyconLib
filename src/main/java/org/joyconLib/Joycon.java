@@ -27,8 +27,12 @@ public class Joycon {
     private LeftTraductor leftTraductor;
     private RightTraductor rightTraductor;
 
-    public Joycon() {
-        initialize();
+    public Joycon(short joyconId) {
+        if ((joyconId == JoyconConstant.JOYCON_LEFT) || (joyconId == JoyconConstant.JOYCON_RIGHT)) {
+            initialize(joyconId);
+        } else {
+            System.out.println("Wrong joycon id!\nPlease use 'JoyconConstant.JOYCON_RIGHT or JoyconConstant.JOYCON_LEFT'");
+        }
     }
 
     public void setListener(JoyconListener li) {
@@ -47,7 +51,7 @@ public class Joycon {
         return isClosed;
     }
 
-    private void initialize() {
+    private void initialize(short joyconId) {
         joyconInfo = null;
         joycon = null;
         leftTraductor = new LeftTraductor();
@@ -55,7 +59,7 @@ public class Joycon {
         System.out.println("Listing Hid devices...");
         List<HidDeviceInfo> list = PureJavaHidApi.enumerateDevices();
         for (HidDeviceInfo info : list) {
-            if ((info.getVendorId() == JoyconConstant.VENDOR_ID) && JoyconConstant.MANUFACTURER.equals("Nintendo")) {
+            if ((info.getManufacturerString().equals(JoyconConstant.MANUFACTURER)) && (info.getVendorId() == JoyconConstant.VENDOR_ID) && (info.getProductId() == joyconId)) {
                 System.out.println("Found a Nintendo gear!\nConecting...");
                 joyconInfo = info;
             }
@@ -64,9 +68,9 @@ public class Joycon {
             try {
                 joycon = PureJavaHidApi.openDevice(joyconInfo);
                 System.out.print("Connected to Joy-Con ");
-                if (joyconInfo.getProductId() == JoyconConstant.LEFT_PRODUCT_ID) {
+                if (joyconInfo.getProductId() == JoyconConstant.JOYCON_LEFT) {
                     System.out.println("Left!");
-                } else if (joyconInfo.getProductId() == JoyconConstant.RIGHT_PRODUCT_ID) {
+                } else if (joyconInfo.getProductId() == JoyconConstant.JOYCON_RIGHT) {
                     System.out.println("Right!");
                 }
                 joycon.setInputReportListener(new InputReportListener() {
@@ -74,11 +78,11 @@ public class Joycon {
                     public void onInputReport(HidDevice source, byte id, byte[] data, int len) {
                         HashMap<String, Boolean> newInputs = new HashMap<>();
                         byte joystick = -1;
-                        if (joyconInfo.getProductId() == JoyconConstant.LEFT_PRODUCT_ID) {
+                        if (joyconInfo.getProductId() == JoyconConstant.JOYCON_LEFT) {
                             leftTraductor.translate(data);
                             newInputs = leftTraductor.getInputs();
                             joystick = leftTraductor.getJoystick();
-                        } else if (joyconInfo.getProductId() == JoyconConstant.RIGHT_PRODUCT_ID) {
+                        } else if (joyconInfo.getProductId() == JoyconConstant.JOYCON_RIGHT) {
                             rightTraductor.translate(data);
                             newInputs = rightTraductor.getInputs();
                             joystick = rightTraductor.getJoystick();

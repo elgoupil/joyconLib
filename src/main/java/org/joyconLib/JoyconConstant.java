@@ -14,8 +14,8 @@ public class JoyconConstant {
     //Other Values
     public static final short VENDOR_ID = 0x057E;
     public static final String MANUFACTURER = "Nintendo";
-    public static final short LEFT_PRODUCT_ID = 0x2006;
-    public static final short RIGHT_PRODUCT_ID = 0x2007;
+    public static final short JOYCON_LEFT = 0x2006;
+    public static final short JOYCON_RIGHT = 0x2007;
 
     //Universal Values
     public static final String SL = "SL";
