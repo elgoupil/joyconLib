@@ -8,8 +8,12 @@ package org.joyconLib;
 import java.util.HashMap;
 
 /**
+ * <b>The traductor for the right joycon</b>
+ * <p>
+ * This class will translate the raw value of the joycon</p>
  *
- * @author renardn
+ * @version 1.0
+ * @author goupil
  */
 public class RightTraductor {
 

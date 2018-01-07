@@ -8,8 +8,12 @@ package org.joyconLib;
 import java.util.HashMap;
 
 /**
+ * <b>The traductor for the left joycon</b>
+ * <p>
+ * This class will translate the raw value of the joycon</p>
  *
- * @author renardn
+ * @version 1.0
+ * @author goupil
  */
 public class LeftTraductor {
 
@@ -31,7 +35,7 @@ public class LeftTraductor {
         inputValueByte0 = data[0];
         int inputByte1 = data[1] - inputValueByte1;
         inputValueByte1 = data[1];
-        switch (data[2]){
+        switch (data[2]) {
             case 8:
                 joystick = 0;
                 break;
@@ -139,5 +143,5 @@ public class LeftTraductor {
     public byte getJoystick() {
         return joystick;
     }
-    
+
 }

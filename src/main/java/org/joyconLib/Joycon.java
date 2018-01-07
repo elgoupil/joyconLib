@@ -15,8 +15,14 @@ import purejavahidapi.InputReportListener;
 import purejavahidapi.PureJavaHidApi;
 
 /**
+ * <b>Main class of the library. This class will be your joycon</b>
+ * <p>
+ * To use it, just create a new Joycon object</p>
+ * <p>
+ * You can check the example to learn how to use this library</p>
  *
- * @author renardn
+ * @author goupil
+ * @version 1.0
  */
 public class Joycon {
 
@@ -27,18 +33,39 @@ public class Joycon {
     private LeftTraductor leftTraductor;
     private RightTraductor rightTraductor;
 
+    /**
+     * <b>Constructor of the Joycon.</b>
+     *
+     * <p>
+     * To specify a correct identifier just use
+     * <b>JoyconConstant.JOYCON_LEFT</b> to use the left Joycon or
+     * <b>JoyconConstant.JOYCON_RIGHT</b></p>
+     *
+     *
+     * @param joyconId Identifier of the joycon you'll use
+     */
     public Joycon(short joyconId) {
         if ((joyconId == JoyconConstant.JOYCON_LEFT) || (joyconId == JoyconConstant.JOYCON_RIGHT)) {
             initialize(joyconId);
         } else {
-            System.out.println("Wrong joycon id!\nPlease use 'JoyconConstant.JOYCON_RIGHT or JoyconConstant.JOYCON_LEFT'");
+            System.out.println("Wrong joycon id!\nPlease use 'JoyconConstant.JOYCON_RIGHT' or 'JoyconConstant.JOYCON_LEFT'");
         }
     }
 
+    /**
+     * <b>Set the listener of the Joycon to handle his input</b>
+     *
+     * @param li The listener, specify null to remove it
+     */
     public void setListener(JoyconListener li) {
         j_Listener = li;
     }
 
+    /**
+     * <b>Close the connection with the Joycon</b>
+     *
+     * @return True or false if closed correctly
+     */
     public boolean close() {
         boolean isClosed = false;
         try {

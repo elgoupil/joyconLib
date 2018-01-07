@@ -8,8 +8,16 @@ package org.joyconLib;
 import java.util.HashMap;
 
 /**
+ * <b>The object that will be send when an input is triggered</b>
+ * <p>
+ * <b>newInputs</b> contain the new inputs with this format:
+ * <b>NAME_OF_THE_INPUT</b>:<b>STATE_OF_THE_INPUT</b> (true/false)</p>
  *
- * @author renardn
+ * <p>
+ * <b>joystick</b> contain the value of the joystick (0 - 8)</p>
+ *
+ * @version 1.0
+ * @author goupil
  */
 public class JoyconEvent {
 
