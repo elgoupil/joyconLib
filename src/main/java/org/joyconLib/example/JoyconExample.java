@@ -35,7 +35,7 @@ public class JoyconExample {
         Joycon joycon = new Joycon(JoyconConstant.JOYCON_LEFT);
         //Set the listener for the Joycon and create a new Listener on the go
         joycon.setListener(new JoyconListener() {
-            //Override the method to do what I want with the inputs
+            //Override the method to do what you want with the inputs
             @Override
             public void handleNewInput(JoyconEvent je) {
                 //Navigate in the inputs map
