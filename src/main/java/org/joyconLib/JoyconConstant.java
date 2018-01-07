@@ -6,7 +6,7 @@
 package org.joyconLib;
 
 /**
- * <b>The class with all the constant value the library need to work</b>
+ * <b>The class with all the constant value the library needs to work</b>
  *
  * @version 1.0
  * @author goupil
