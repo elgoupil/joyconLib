@@ -8,69 +8,77 @@ package org.joyconLib;
 import java.util.HashMap;
 
 /**
- * <b>The traductor for the left joycon</b>
+ * <b>The translator for the left joycon</b>
  * <p>
  * This class will translate the raw value of the joycon</p>
  *
  * @version 1.0
  * @author goupil
  */
-public class LeftTraductor {
+public class LeftTranslator {
 
-    private int inputValueByte0;
-    private int inputValueByte1;
+    private int lastShared;
+    private int lastLeft;
     private HashMap<String, Boolean> inputs;
+    private HashMap<String, Boolean> oldInputs;
     private byte joystick;
+    private byte battery;
 
-    public LeftTraductor() {
-        inputValueByte0 = 0;
-        inputValueByte1 = 0;
+    public LeftTranslator() {
+        lastShared = 0;
+        lastLeft = 0;
+        battery = 0;
         joystick = 0;
         inputs = new HashMap<>();
     }
 
-    public void translate(byte[] data) {
+    public void translate(byte id, byte[] data) {
+        //Clearing the inputs
         inputs.clear();
-        int inputByte0 = data[0] - inputValueByte0;
-        inputValueByte0 = data[0];
-        int inputByte1 = data[1] - inputValueByte1;
-        inputValueByte1 = data[1];
-        switch (data[2]) {
-            case 8:
-                joystick = 0;
+
+        //Getting input change
+        int shared = data[3];
+        int left = data[4];
+        if (data[3] < 0) {
+            shared = data[3] + 256;
+        }
+        if (data[4] < 0) {
+            left = data[4] + 256;
+        }
+        int sharedByte = shared - lastShared;
+        lastShared = shared;
+        int leftByte = left - lastLeft;
+        lastLeft = left;
+
+        //Battery translation
+        int batteryInt = data[1];
+        if (data[1] < 0) {
+            batteryInt = data[1] + 256;
+        }
+        battery = Byte.parseByte(Integer.toHexString(batteryInt).substring(0, 1));
+        
+        //Inputs translation
+        switch (sharedByte) {
+            case JoyconConstant.MINUS_ON:
+                inputs.put(JoyconConstant.MINUS, true);
                 break;
-            case 0:
-                joystick = 1;
+            case JoyconConstant.MINUS_OFF:
+                inputs.put(JoyconConstant.MINUS, false);
                 break;
-            case 1:
-                joystick = 2;
+            case JoyconConstant.LEFT_STICK_ON:
+                inputs.put(JoyconConstant.LEFT_STICK, true);
                 break;
-            case 2:
-                joystick = 3;
+            case JoyconConstant.LEFT_STICK_OFF:
+                inputs.put(JoyconConstant.LEFT_STICK, false);
                 break;
-            case 3:
-                joystick = 4;
+            case JoyconConstant.CAPTURE_ON:
+                inputs.put(JoyconConstant.CAPTURE, true);
                 break;
-            case 4:
-                joystick = 5;
-                break;
-            case 5:
-                joystick = 6;
-                break;
-            case 6:
-                joystick = 7;
-                break;
-            case 7:
-                joystick = 8;
+            case JoyconConstant.CAPTURE_OFF:
+                inputs.put(JoyconConstant.CAPTURE, false);
                 break;
         }
-        switch (inputByte0) {
-            case JoyconConstant.LEFT_ON:
-                inputs.put(JoyconConstant.LEFT, true);
-                break;
-            case JoyconConstant.LEFT_OFF:
-                inputs.put(JoyconConstant.LEFT, false);
-                break;
+        switch (leftByte) {
             case JoyconConstant.DOWN_ON:
                 inputs.put(JoyconConstant.DOWN, true);
                 break;
@@ -89,11 +97,11 @@ public class LeftTraductor {
             case JoyconConstant.RIGHT_OFF:
                 inputs.put(JoyconConstant.RIGHT, false);
                 break;
-            case JoyconConstant.SL_ON:
-                inputs.put(JoyconConstant.SL, true);
+            case JoyconConstant.LEFT_ON:
+                inputs.put(JoyconConstant.LEFT, true);
                 break;
-            case JoyconConstant.SL_OFF:
-                inputs.put(JoyconConstant.SL, false);
+            case JoyconConstant.LEFT_OFF:
+                inputs.put(JoyconConstant.LEFT, false);
                 break;
             case JoyconConstant.SR_ON:
                 inputs.put(JoyconConstant.SR, true);
@@ -101,25 +109,11 @@ public class LeftTraductor {
             case JoyconConstant.SR_OFF:
                 inputs.put(JoyconConstant.SR, false);
                 break;
-        }
-        switch (inputByte1) {
-            case JoyconConstant.MINUS_ON:
-                inputs.put(JoyconConstant.MINUS, true);
+            case JoyconConstant.SL_ON:
+                inputs.put(JoyconConstant.SL, true);
                 break;
-            case JoyconConstant.MINUS_OFF:
-                inputs.put(JoyconConstant.MINUS, false);
-                break;
-            case JoyconConstant.L_CLICKJOY_ON:
-                inputs.put(JoyconConstant.L_CLICKJOY, true);
-                break;
-            case JoyconConstant.L_CLICKJOY_OFF:
-                inputs.put(JoyconConstant.L_CLICKJOY, false);
-                break;
-            case JoyconConstant.CAPTURE_ON:
-                inputs.put(JoyconConstant.CAPTURE, true);
-                break;
-            case JoyconConstant.CAPTURE_OFF:
-                inputs.put(JoyconConstant.CAPTURE, false);
+            case JoyconConstant.SL_OFF:
+                inputs.put(JoyconConstant.SL, false);
                 break;
             case JoyconConstant.L_ON:
                 inputs.put(JoyconConstant.L, true);
@@ -134,6 +128,11 @@ public class LeftTraductor {
                 inputs.put(JoyconConstant.ZL, false);
                 break;
         }
+        //Clearing inputs if the same
+        if (inputs.equals(oldInputs)) {
+            oldInputs = inputs;
+            inputs.clear();
+        }
     }
 
     public HashMap<String, Boolean> getInputs() {
@@ -142,6 +141,10 @@ public class LeftTraductor {
 
     public byte getJoystick() {
         return joystick;
+    }
+
+    public byte getBattery() {
+        return battery;
     }
 
 }
