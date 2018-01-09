@@ -103,56 +103,64 @@ public class Joycon {
                     System.out.println("Right!");
                 }
                 byte ids = 1;
-                byte[] datat = new byte[48];
+                byte[] datat = new byte[16];
                 datat[9] = 0x02;
+                joycon.setOutputReport(ids, datat, 16);
 
                 Thread.sleep(16);
 
-                datat = new byte[48];
+                datat = new byte[16];
                 datat[9] = 0x03;
                 datat[10] = 0x30;
+                joycon.setOutputReport(ids, datat, 16);
 
                 Thread.sleep(16);
 
-                datat = new byte[48];
+                datat = new byte[16];
                 datat[9] = 0x30;
                 datat[10] = (byte) 240;
+                joycon.setOutputReport(ids, datat, 16);
 
                 Thread.sleep(16);
 
-                datat = new byte[48];
+                datat = new byte[16];
                 datat[9] = 0x48;
                 datat[10] = 0x01;
+                joycon.setOutputReport(ids, datat, 16);
 
                 Thread.sleep(16);
 
-                datat = new byte[48];
+                datat = new byte[16];
                 datat[1] = (byte) 0xc2;
                 datat[2] = (byte) 0xc8;
                 datat[3] = 0x03;
                 datat[4] = 0x72;
+                joycon.setOutputReport(ids, datat, 16);
 
                 Thread.sleep(90);
 
-                datat = new byte[48];
+                datat = new byte[16];
                 datat[1] = 0x00;
                 datat[2] = 0x01;
                 datat[3] = 0x40;
                 datat[4] = 0x40;
+                joycon.setOutputReport(ids, datat, 16);
 
                 Thread.sleep(16);
 
-                datat = new byte[48];
+                datat = new byte[16];
                 datat[1] = (byte) 0xc3;
                 datat[2] = (byte) 0xc8;
                 datat[3] = 0x60;
                 datat[4] = 0x64;
+                joycon.setOutputReport(ids, datat, 16);
 
                 Thread.sleep(30);
 
-                datat = new byte[48];
+                datat = new byte[16];
                 datat[9] = 0x48;
                 datat[10] = 0x00;
+                joycon.setOutputReport(ids, datat, 16);
 
                 Thread.sleep(100);
                 joycon.setInputReportListener(new InputReportListener() {
@@ -170,7 +178,7 @@ public class Joycon {
                             joystick = rightTranslator.getJoystick();
                         }
                         if (j_Listener != null) {
-                            if (!newInputs.isEmpty() && joystick != 0) {
+                            if (!newInputs.isEmpty() || joystick != 0) {
                                 j_Listener.handleNewInput(new JoyconEvent(newInputs, joystick));
                             }
                         }
