@@ -51,7 +51,7 @@ public class JoyconExample {
                     }
                 }
                 //Print to the console the position of the joystick
-                System.out.println("Joystick: " + je.getJoystick());
+                System.out.println("Joystick\tX: " + je.getHorizontal() + "\tY: " + je.getVertical());
             }
         });
     }

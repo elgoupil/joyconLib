@@ -22,19 +22,25 @@ import java.util.HashMap;
 public class JoyconEvent {
 
     private HashMap<String, Boolean> newInputs;
-    private byte joystick;
+    private float horizontal;
+    private float vertical;
 
-    public JoyconEvent(HashMap<String, Boolean> newInputs, byte joystick) {
+    public JoyconEvent(HashMap<String, Boolean> newInputs, float horizontal, float vertical) {
         this.newInputs = newInputs;
-        this.joystick = joystick;
+        this.horizontal = horizontal;
+        this.vertical = vertical;
     }
 
     public HashMap<String, Boolean> getNewInputs() {
         return newInputs;
     }
 
-    public byte getJoystick() {
-        return joystick;
+    public float getHorizontal() {
+        return horizontal;
+    }
+
+    public float getVertical() {
+        return vertical;
     }
 
 }

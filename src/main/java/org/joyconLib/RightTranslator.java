@@ -21,20 +21,44 @@ public class RightTranslator {
     private int lastRight;
     private HashMap<String, Boolean> inputs;
     private HashMap<String, Boolean> oldInputs;
-    private byte joystick;
+    private float horizontal;
+    private float vertical;
     private byte battery;
+    private JoyconStickCalc calculator;
+    private int[] stick_cal_x_r;
+    private int[] stick_cal_y_r;
 
-    public RightTranslator() {
+    public RightTranslator(JoyconStickCalc calculator, int[] stick_cal_x_r, int[] stick_cal_y_r) {
         lastShared = 0;
         lastRight = 0;
         battery = 0;
-        joystick = 0;
+        horizontal = 0f;
+        vertical = 0f;
         inputs = new HashMap<>();
+        this.calculator = calculator;
+        this.stick_cal_x_r = stick_cal_x_r;
+        this.stick_cal_y_r = stick_cal_y_r;
     }
 
-    public void translate(byte id, byte[] data) {
+    public void translate(byte[] data) {
         //Clearing the inputs
         inputs.clear();
+
+        int[] temp = new int[8];
+        for (int i = 5; i < 8; i++) {
+            byte b = data[i];
+            if (b < 0) {
+                temp[i] = b + 256;
+            } else {
+                temp[i] = b;
+            }
+        }
+        int x = temp[9] | ((temp[10] & 0xF) << 8);
+        int y = (temp[10] >> 4) | (temp[11] << 4);
+        calculator.analogStickCalc(x, y, stick_cal_x_r, stick_cal_y_r);
+
+        horizontal = calculator.getHorizontal();
+        vertical = calculator.getVertical();
 
         //Getting input change
         int shared = data[3];
@@ -139,12 +163,16 @@ public class RightTranslator {
         return inputs;
     }
 
-    public byte getJoystick() {
-        return joystick;
-    }
-
     public byte getBattery() {
         return battery;
+    }
+
+    public float getHorizontal() {
+        return horizontal;
+    }
+
+    public float getVertical() {
+        return vertical;
     }
 
 }

@@ -21,20 +21,44 @@ public class LeftTranslator {
     private int lastLeft;
     private HashMap<String, Boolean> inputs;
     private HashMap<String, Boolean> oldInputs;
-    private byte joystick;
+    private float horizontal;
+    private float vertical;
     private byte battery;
+    private JoyconStickCalc calculator;
+    private int[] stick_cal_x_l;
+    private int[] stick_cal_y_l;
 
-    public LeftTranslator() {
+    public LeftTranslator(JoyconStickCalc calculator, int[] stick_cal_x_l, int[] stick_cal_y_l) {
         lastShared = 0;
         lastLeft = 0;
         battery = 0;
-        joystick = 0;
+        horizontal = 0f;
+        vertical = 0f;
         inputs = new HashMap<>();
+        this.calculator = calculator;
+        this.stick_cal_x_l = stick_cal_x_l;
+        this.stick_cal_y_l = stick_cal_y_l;
     }
 
-    public void translate(byte id, byte[] data) {
+    public void translate(byte[] data) {
         //Clearing the inputs
         inputs.clear();
+
+        int[] temp = new int[8];
+        for (int i = 5; i < 8; i++) {
+            byte b = data[i];
+            if (b < 0) {
+                temp[i] = b + 256;
+            } else {
+                temp[i] = b;
+            }
+        }
+        int x = temp[5] | ((temp[6] & 0xF) << 8);
+        int y = (temp[6] >> 4) | (temp[7] << 4);
+        calculator.analogStickCalc(x, y, stick_cal_x_l, stick_cal_y_l);
+
+        horizontal = calculator.getHorizontal();
+        vertical = calculator.getVertical();
 
         //Getting input change
         int shared = data[3];
@@ -56,7 +80,7 @@ public class LeftTranslator {
             batteryInt = data[1] + 256;
         }
         battery = Byte.parseByte(Integer.toHexString(batteryInt).substring(0, 1));
-        
+
         //Inputs translation
         switch (sharedByte) {
             case JoyconConstant.MINUS_ON:
@@ -139,12 +163,16 @@ public class LeftTranslator {
         return inputs;
     }
 
-    public byte getJoystick() {
-        return joystick;
-    }
-
     public byte getBattery() {
         return battery;
+    }
+
+    public float getHorizontal() {
+        return horizontal;
+    }
+
+    public float getVertical() {
+        return vertical;
     }
 
 }
