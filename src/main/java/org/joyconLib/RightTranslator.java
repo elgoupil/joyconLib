@@ -44,8 +44,8 @@ public class RightTranslator {
         //Clearing the inputs
         inputs.clear();
 
-        int[] temp = new int[8];
-        for (int i = 5; i < 8; i++) {
+        int[] temp = new int[12];
+        for (int i = 5; i < 12; i++) {
             byte b = data[i];
             if (b < 0) {
                 temp[i] = b + 256;
@@ -53,8 +53,8 @@ public class RightTranslator {
                 temp[i] = b;
             }
         }
-        int x = temp[9] | ((temp[10] & 0xF) << 8);
-        int y = (temp[10] >> 4) | (temp[11] << 4);
+        int x = temp[8] | ((temp[9] & 0xF) << 8);
+        int y = (temp[9] >> 4) | (temp[10] << 4);
         calculator.analogStickCalc(x, y, stick_cal_x_r, stick_cal_y_r);
 
         horizontal = calculator.getHorizontal();
@@ -62,12 +62,12 @@ public class RightTranslator {
 
         //Getting input change
         int shared = data[3];
-        int right = data[4];
+        int right = data[2];
         if (data[3] < 0) {
             shared = data[3] + 256;
         }
-        if (data[4] < 0) {
-            right = data[4] + 256;
+        if (data[2] < 0) {
+            right = data[2] + 256;
         }
         int sharedByte = shared - lastShared;
         lastShared = shared;
