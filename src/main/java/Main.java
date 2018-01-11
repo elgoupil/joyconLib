@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.joyconLib.example;
 
 import java.util.Map;
 import org.joyconLib.Joycon;
@@ -11,27 +5,21 @@ import org.joyconLib.JoyconConstant;
 import org.joyconLib.JoyconEvent;
 import org.joyconLib.JoyconListener;
 
-/**
- * <b>The example of the JoyconLib</b>
- * <p>
- * This example will try to connect to the left joycon and print on the console
- * the inputs that are triggered</p>
- *
- * @version 1.0
- * @author goupil
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-public class JoyconExample {
+/**
+ *
+ * @author renardn
+ */
+public class Main {
 
     /**
-     * <b>The example of the JoyconLib</b>
-     * <p>
-     * This example will try to connect to the left joycon and print on the
-     * console the inputs that are triggered</p>
-     *
-     * <p>
-     * Comment are in the method to learn how it work</p>
+     * @param args the command line arguments
      */
-    public void example() {
+    public static void main(String[] args) {
         //Create a new Joycon with the identifier of the left joycon
         Joycon joycon = new Joycon(JoyconConstant.JOYCON_LEFT);
         //Set the listener for the Joycon and create a new Listener on the go
@@ -58,4 +46,5 @@ public class JoyconExample {
             }
         });
     }
+
 }

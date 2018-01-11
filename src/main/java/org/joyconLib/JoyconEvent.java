@@ -24,11 +24,13 @@ public class JoyconEvent {
     private HashMap<String, Boolean> newInputs;
     private float horizontal;
     private float vertical;
+    private byte battery;
 
-    public JoyconEvent(HashMap<String, Boolean> newInputs, float horizontal, float vertical) {
+    public JoyconEvent(HashMap<String, Boolean> newInputs, float horizontal, float vertical, byte battery) {
         this.newInputs = newInputs;
         this.horizontal = horizontal;
         this.vertical = vertical;
+        this.battery = battery;
     }
 
     public HashMap<String, Boolean> getNewInputs() {
@@ -41,6 +43,10 @@ public class JoyconEvent {
 
     public float getVertical() {
         return vertical;
+    }
+
+    public byte getBattery() {
+        return battery;
     }
 
 }

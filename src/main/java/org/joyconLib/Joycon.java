@@ -210,20 +210,23 @@ public class Joycon {
                             HashMap<String, Boolean> newInputs = new HashMap<>();
                             float horizontal = 0f;
                             float vertical = 0f;
+                            byte battery = 0;
                             if (joyconInfo.getProductId() == JoyconConstant.JOYCON_LEFT) {
                                 leftTranslator.translate(data);
                                 newInputs = leftTranslator.getInputs();
                                 horizontal = leftTranslator.getHorizontal();
                                 vertical = leftTranslator.getVertical();
+                                battery = leftTranslator.getBattery();
                             } else if (joyconInfo.getProductId() == JoyconConstant.JOYCON_RIGHT) {
                                 rightTranslator.translate(data);
                                 newInputs = rightTranslator.getInputs();
                                 horizontal = rightTranslator.getHorizontal();
                                 vertical = rightTranslator.getVertical();
+                                battery = rightTranslator.getBattery();
                             }
                             if (j_Listener != null) {
                                 if (!newInputs.isEmpty() || (horizontal != this.horizontal || vertical != this.vertical)) {
-                                    j_Listener.handleNewInput(new JoyconEvent(newInputs, horizontal, vertical));
+                                    j_Listener.handleNewInput(new JoyconEvent(newInputs, horizontal, vertical, battery));
                                     this.horizontal = horizontal;
                                     this.vertical = vertical;
                                 }
